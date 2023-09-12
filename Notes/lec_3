@@ -1,0 +1,42 @@
+QUIZ:
+	- csv = pd.read_csv(csv_file)
+		- csv.head()
+	- arr = np.array(some_arr)
+	- arr.shape()
+	- ML came from AI
+
+Datasets:
+	- datasets are tubular in darascience
+	- columns are features
+		- categorial features are like enums (list of possible choices)
+			- so weapons are lance, drill, etc.
+			- weight is heavy build, light build
+			- self righting is true or false
+		- numerical features are more like numbers to describe data
+			- weight in kilograms, stuff like that
+	- rows are instances
+	- when your target is a catergorical feature, you need to do classification
+	- regressions tasks predict numeric features, classification tasks predict categorical features
+
+Quiz:
+	- a feature is a column of data
+	- a target is technically a feature, its a label for the column of data
+	- instance is a row of data
+	- classification and regresion are both kinds of supervised learning because we have a target
+	- classification deals with catergorical data regression deals with numerical data
+
+Machine learning hypothesis:
+	- machine learning is trying to find a correct hypothesis (see slides for example)
+	- the hypothesis is a mathematic propositional statement
+	- hypothesis space is all possible hypothesis for a dataset
+	- hypothesis space size
+		- take a table describing all possible outcomes, the last column represents the 
+		hypothesis outcome. So however long the length of that column is, represent as a binary number, thats all possible outcomes, so 2^length of final column 
+	- some hypothesis are bad, for instance, I always win
+	- any reasonable algorithm must skip a couple hypothesis, we aren't going over all 2^2^n
+	- ML algorithms apply an inference so that they dont check the whole hypothesis space
+		- robots that beat meadium guys also probably beat light guys
+		- so the algorithm has some bias
+	- a database is a totally unbiased algorithm
+		- to see if something wins, just look it up in a database
+		- if its not there, just dont say anything

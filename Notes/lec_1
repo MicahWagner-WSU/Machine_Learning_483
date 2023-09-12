@@ -1,0 +1,10 @@
+contact info:
+	- dont use canvas for email
+
+Machine Learning:
+	- machine learning algorithms are like algorithms we know, but they have soft rules, contantly modifying the algorithms rules
+	- in machine learning we usually train a model to accomplish a goal, data mining is just having a machine learning algorithm find arbitrary patterns and data with no clear goal
+	- Machine learning is a subset of data science
+	- two branches of Machine Learning, Supervised learning, and unsupervised learning
+		- supervised learning is when you are given labeled data on correct and incorrect data, and the algorithm has to figure out the rule that makes something correct or wrong
+		- unsupervised learning is when there is no "correct" choice, and the algorithm just bundles similar data

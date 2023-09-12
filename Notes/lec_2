@@ -1,0 +1,4 @@
+DO machine learning:
+	- decide which of the 3 branches of ML your problem fits under
+	- we'll usually use CSV files to contain data to then train the model with
+	- We will use miniconda as our dev enviroment
