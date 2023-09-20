@@ -26,16 +26,20 @@ def main():
 	test.insert(len(test.columns), 'correct?', correct)
 	test.to_csv(sys.stdout, index=False)
 
+# returns an array with the first index being the class predicted,
+# the second being the probability of the prediction,
+# and the last being whether the guess was correct or not
 def predict(predict_x):
 	probability_array = []
 	class_array = [] 
 	class_types = [1,2,3,4,5,6,7]
 
-	# loop over each class to see the hieghest probability 
+	# loop over each class to see the heighest probability 
 	for c in class_types:
 		num = calc_naive_bayes(c, predict_x)
 		den = 0
 
+		#convert the naive bayse calculations into probabilities
 		for current_class in class_types:
 			den += calc_naive_bayes(current_class, predict_x)
 		probability_array.append(num / den)
@@ -46,12 +50,15 @@ def predict(predict_x):
 	probability =  probability_array[highest_prob_index]
 	return [class_predicted, probability, "CORRECT" if class_predicted == predict_x['class_type'] else "WRONG"]
 
-
+# calculates naive bayes given a class and a set of features
+# this function does not calculate the probability, just p(c)*p(f1|c)*p(f2|c)...
 def calc_naive_bayes(c,row):
 	class_count = (train["class_type"] == c).sum()
 	nb = math.log((class_count + alpha) / (train["class_type"].value_counts().sum() + alpha * dimensionality), 2)
+
+	# exclude animal name and class type
 	for feature in row[1:-1].keys():
-		nb += math.log(calc_feature_given_class(feature,int(c),row[feature]),2)
+		nb += math.log(calc_feature_given_class(feature,c,row[feature]),2)
 	return 2**nb
 
 
@@ -63,10 +70,10 @@ def calc_naive_bayes(c,row):
 @cache
 def calc_feature_given_class(f, c, f_val):
 	class_types = train["class_type"].value_counts()
-	numerator = 0
 	numerator = ((train[f] == f_val) & (train["class_type"] == c)).sum() + alpha
 
-	denominator = class_types[c] + alpha * dimensionality
+	# the .get will ensure that if c doesn't exist, it returns 0 instead of a keyerror
+	denominator = class_types.get(c, default = 0) + alpha * dimensionality
 	return numerator / denominator
 
 main()
