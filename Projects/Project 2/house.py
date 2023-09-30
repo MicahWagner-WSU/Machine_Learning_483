@@ -21,14 +21,19 @@ class SelectColumns( BaseEstimator, TransformerMixin ):
 
 grid = { 
 'column_select__columns': [
-		[ 'Gr Liv Area' ],
-		[ 'Gr Liv Area', 'Overall Qual' ],
-		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add'],
-		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt'],
-		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt', 'Foundation_PConc'],
-		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt', 'Foundation_PConc', 'Bsmt Qual_Ex'],
-		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt', 'Foundation_PConc', 'Bsmt Qual_Ex', 'BsmtFin Type 1_GLQ'],
-		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt', 'Foundation_PConc', 'Bsmt Qual_Ex', 'BsmtFin Type 1_GLQ', 'Full Bath'],
+
+		[ 'Gr Liv Area', 
+		'Overall Qual', 
+		'Year Built', 
+		'Year Remod/Add', 
+		'Neighborhood_NridgHt',  
+		'Bsmt Qual_Ex', 
+		'BsmtFin Type 1_GLQ', 
+		'Kitchen Qual_Ex', 
+		'Garage Area',
+		'Fireplaces',
+		'Total Bsmt SF',
+		'Lot Shape_IR1'],
 	],
 'linear_regression': [
 	LinearRegression( n_jobs = -1 ), # no transformation
@@ -71,12 +76,10 @@ train_x, test_x, train_y, test_y = train_test_split(xs, ys, train_size=0.7)
 search.fit(xs, ys)
 
 # Print the best score and make predictions
-print("Best R^2 Score:", search.best_score_)
-print("Best params:", search.best_params_)
+print(search.best_score_)
+print("\n", search.best_params_)
 
-print("Predictions for the first three samples:")
 
-print(search.predict(xs.iloc[:3]))
 
 
 
