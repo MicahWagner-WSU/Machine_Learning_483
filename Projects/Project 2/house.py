@@ -16,13 +16,19 @@ class SelectColumns( BaseEstimator, TransformerMixin ):
 		return self
 	# actually perform the selection
 	def transform( self, xs ):
-		return xs[ self.columns ]
+		return xs[ self.columns ].fillna(0)
+
 
 grid = { 
 'column_select__columns': [
 		[ 'Gr Liv Area' ],
 		[ 'Gr Liv Area', 'Overall Qual' ],
-		[ 'Gr Liv Area', 'Overall Qual', 'Year Built' ],
+		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add'],
+		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt'],
+		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt', 'Foundation_PConc'],
+		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt', 'Foundation_PConc', 'Bsmt Qual_Ex'],
+		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt', 'Foundation_PConc', 'Bsmt Qual_Ex', 'BsmtFin Type 1_GLQ'],
+		[ 'Gr Liv Area', 'Overall Qual', 'Year Built', 'Year Remod/Add', 'Neighborhood_NridgHt', 'Foundation_PConc', 'Bsmt Qual_Ex', 'BsmtFin Type 1_GLQ', 'Full Bath'],
 	],
 'linear_regression': [
 	LinearRegression( n_jobs = -1 ), # no transformation
@@ -40,16 +46,11 @@ grid = {
 		inverse_func = np.exp),
 	]
 }
-regressor = TransformedTargetRegressor(
-	LinearRegression( n_jobs = -1 ),
-	func = np.sqrt,
-	inverse_func = np.square
-)
 
 # Create a pipeline with column selection and regression
 steps = [
-    ('column_select', SelectColumns(columns=['Gr Liv Area', 'Overall Qual', 'Year Built'])),  # Adjust the columns as needed
-    ('linear_regression', regressor),  # You can use any of the regressors from your 'grid'
+    ('column_select', SelectColumns([])),  
+    ('linear_regression', None),  
 ]
 
 pipe = Pipeline(steps)
@@ -59,18 +60,22 @@ search = GridSearchCV(pipe, grid, scoring='r2', n_jobs=-1)
 
 # Load the data
 data = pd.read_csv("AmesHousing.csv")
-xs = data.drop(columns=["SalePrice"])
+tmp_xs = data.drop(columns=["SalePrice"])
+xs = pd.get_dummies(tmp_xs, dtype=float)
 ys = data["SalePrice"]
 
 # Split the data into training and testing sets
 train_x, test_x, train_y, test_y = train_test_split(xs, ys, train_size=0.7)
 
 # Fit the pipeline using the training data
-search.fit(train_x, train_y)
+search.fit(xs, ys)
 
 # Print the best score and make predictions
 print("Best R^2 Score:", search.best_score_)
+print("Best params:", search.best_params_)
+
 print("Predictions for the first three samples:")
+
 print(search.predict(xs.iloc[:3]))
 
 
