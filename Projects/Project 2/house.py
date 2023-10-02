@@ -8,13 +8,13 @@ import numpy as np
 import pandas as pd
 
 class SelectColumns( BaseEstimator, TransformerMixin ):
-	# pass the function we want to apply to the column 'SalePrice’
+
 	def __init__( self, columns ):
 		self.columns = columns
-	# don't need to do anything
+
 	def fit( self, xs, ys, **params ):
 		return self
-	# actually perform the selection
+
 	def transform( self, xs ):
 		return xs[ self.columns ].fillna(0)
 
@@ -41,7 +41,7 @@ grid = {
 		'Neighborhood_Timber'],
 	],
 'linear_regression': [
-	LinearRegression( n_jobs = -1 ), # no transformation
+	LinearRegression( n_jobs = -1 ), 
 	TransformedTargetRegressor(
 		LinearRegression( n_jobs = -1 ),
 		func = np.sqrt,
@@ -57,42 +57,22 @@ grid = {
 	]
 }
 
-# Create a pipeline with column selection and regression
 steps = [
     ('column_select', SelectColumns([])),  
     ('linear_regression', None),  
 ]
 
 pipe = Pipeline(steps)
-
-# Create a grid search using the pipeline
 search = GridSearchCV(pipe, grid, scoring='r2', n_jobs=-1)
 
-# Load the data
 data = pd.read_csv("AmesHousing.csv")
-tmp_xs = data.drop(columns=["SalePrice"])
-xs = pd.get_dummies(tmp_xs, dtype=float)
+unexpanded_xs = data.drop(columns=["SalePrice"])
+xs = pd.get_dummies(unexpanded_xs, dtype=float)
 ys = data["SalePrice"]
 
-# Split the data into training and testing sets
-train_x, test_x, train_y, test_y = train_test_split(xs, ys, train_size=0.7)
 
-# Fit the pipeline using the training data
 search.fit(xs, ys)
 
-# Print the best score and make predictions
+
 print(search.best_score_)
 print("\n", search.best_params_)
-
-
-
-
-
-
-
-
-
-
-
-
-
