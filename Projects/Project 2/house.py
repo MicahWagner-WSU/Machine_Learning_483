@@ -22,7 +22,8 @@ class SelectColumns( BaseEstimator, TransformerMixin ):
 grid = { 
 'column_select__columns': [
 
-		[ 'Gr Liv Area', 
+		[ 
+		'Gr Liv Area', 
 		'Overall Qual', 
 		'Year Built', 
 		'Year Remod/Add', 
@@ -33,7 +34,11 @@ grid = {
 		'Garage Area',
 		'Fireplaces',
 		'Total Bsmt SF',
-		'Lot Shape_IR1'],
+		'Lot Shape_IR1',
+		'Neighborhood_NoRidge',
+		'Neighborhood_OldTown',
+		'Neighborhood_StoneBr',
+		'Neighborhood_Timber'],
 	],
 'linear_regression': [
 	LinearRegression( n_jobs = -1 ), # no transformation
