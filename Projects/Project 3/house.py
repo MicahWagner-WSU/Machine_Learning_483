@@ -62,7 +62,8 @@ search = GridSearchCV(pipe, grid, scoring='r2', n_jobs=-1)
 
 data = pd.read_csv("AmesHousing.csv")
 unexpanded_xs = data.drop(columns=["SalePrice", "Neighborhood"])
-xs = pd.get_dummies(unexpanded_xs, dtype=float)
+expanded_xs = pd.get_dummies(unexpanded_xs, dtype=float)
+xs = expanded_xs.select_dtypes(include='number')
 ys = data["SalePrice"]
 
 
