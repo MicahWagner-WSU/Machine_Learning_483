@@ -145,30 +145,30 @@ search_gradient= GridSearchCV(pipe, grid_gradient, scoring='r2', n_jobs=-1)
 search_linear.fit(xs, ys)
 
 print("Linear Regression: ")
-print(search_linear.best_score_)
-print(search_linear.best_params_)
+print("R-squared:" + str(search_linear.best_score_))
+print("Best Params:" + str(search_linear.best_params_))
 print("")
 
 
 search_gradient.fit(xs, ys)
 
 print("Gradient boosting:  ")
-print(search_gradient.best_score_)
-print(search_gradient.best_params_)
+print("R-squared:" + str(search_gradient.best_score_))
+print("Best Params:" + str(search_gradient.best_params_))
 print("")
 
 search_forest.fit(xs, ys)
 
 print("Random Forest: ")
-print(search_forest.best_score_)
-print(search_forest.best_params_)
+print("R-squared:" + str(search_forest.best_score_))
+print("Best Params:" + str(search_forest.best_params_))
 print("")
 
 
 search_tree.fit(xs, ys)
 
 print("Decision Tree: ")
-print(search_tree.best_score_)
-print(search_tree.best_params_)
+print("R-squared: " + str(search_tree.best_score_))
+print("Best Params: " + str(search_tree.best_params_))
 print("")
 
