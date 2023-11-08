@@ -65,10 +65,13 @@ def main():
 		print("")
 		print(p_types)
 		print("-------------")
-		print(len(pokemon_data));
-		optimize_n_clusters(range(2,len(pokemon_data)), pokemon_data)
+		cluster_max = len(pokemon_data)
+		if cluster_max > 15:
+			cluster_max = 15
+		optimize_n_clusters(range(2,cluster_max), pokemon_data)
 
 main()
+print(data)
 
 # make function that finds best cluster value, refer quiz answers from slide 12
 # loop over each poke type and call the above function, print results in specifc way
