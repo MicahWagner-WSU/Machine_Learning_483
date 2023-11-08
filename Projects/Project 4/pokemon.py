@@ -28,7 +28,7 @@ print(pokemon_types)
 
 steps = [
 	("select", SelectColumns(["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"])),
-	("cluster", KMeans(n_init = 2))
+	("cluster", KMeans(n_init = 10))
 ]
 
 
