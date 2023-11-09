@@ -21,13 +21,12 @@ class SelectColumns( BaseEstimator, TransformerMixin ):
 data = pd.read_csv("Pokemon.csv")
 data.drop(columns=["Type 2", "Generation", "Legendary"])
 pokemon_types = data["Type 1"].unique()
-numeric_cols = data.select_dtypes(include=[np.number]).columns
-data[numeric_cols] = MinMaxScaler().fit_transform(data[numeric_cols])
-print(pokemon_types)
+
 
 
 steps = [
 	("select", SelectColumns(["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"])),
+	("scale", MinMaxScaler()),
 	("cluster", KMeans(n_init = 10))
 ]
 
@@ -35,43 +34,69 @@ steps = [
 pipe = Pipeline(steps)
 
 def select_type(p_type):
-	return data.loc[data["Type 1"] == p_type]
+	tmp = data.loc[data["Type 1"] == p_type]
+	return tmp[["Name", "HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]]
 
 def optimize_n_clusters(r,data):
 	best_choice = r.start
 	best_silhouette = float('-inf')
+	best_cluster = []
 
 	for n in r:
 		pipe.set_params(cluster__n_clusters = n) 
 		pipe.fit(data)
 		poke_cluster = pipe.predict(data)
-
-		score = silhouette_score(data[["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]], poke_cluster)
+		
+		scaled_data = MinMaxScaler().fit_transform(data[["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]])
+		score = silhouette_score(scaled_data, poke_cluster)
 
 		print(str(n) + " clusters: " + str(score))
 
 		if score > best_silhouette:
 			best_silhouette = score
 			best_choice = n
+			best_cluster = poke_cluster
 
 	print("best number of clusters: " + str(best_choice))
 	print("best score: " + str(best_silhouette))
-	return best_choice
+	return best_cluster
 
 def main():
 
+	clusters = {}
+	poke_types_data = {}
+
 	for p_types in pokemon_types:
-		pokemon_data = select_type(p_types)
+		poke_types_data[p_types] = select_type(p_types)
 		print("")
 		print(p_types)
 		print("-------------")
-		cluster_max = len(pokemon_data)
+		cluster_max = len(poke_types_data[p_types])
 		if cluster_max > 15:
 			cluster_max = 15
-		optimize_n_clusters(range(2,cluster_max), pokemon_data)
+		clusters[p_types] = optimize_n_clusters(range(2,cluster_max), poke_types_data[p_types])
+
+	for p_types in pokemon_types:
+		print("")
+		print(p_types)
+		print("-------------")
+
+		for i in range(0, len(set(clusters[p_types]))):
+			print("Cluster " + str(i))
+
+			pokemon_cluster = poke_types_data[p_types][clusters[p_types] == i]
+			print(pokemon_cluster)
+			print("Mean HP: " + str(pokemon_cluster["HP"].mean()))
+			print("Mean Attack: " + str(pokemon_cluster["Attack"].mean()))
+			print("Mean Defense: " + str(pokemon_cluster["Defense"].mean()))
+			print("Mean Sp. Atk: " + str(pokemon_cluster["Sp. Atk"].mean()))
+			print("Mean Sp. Def: " + str(pokemon_cluster["Sp. Def"].mean()))
+			print("Mean Speed: " + str(pokemon_cluster["Speed"].mean()))
+			print("")
+
+
 
 main()
-print(data)
 
 # make function that finds best cluster value, refer quiz answers from slide 12
 # loop over each poke type and call the above function, print results in specifc way
