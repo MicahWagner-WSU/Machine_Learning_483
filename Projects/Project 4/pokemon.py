@@ -70,7 +70,7 @@ def main():
 		poke_types_data[p_types] = select_type(p_types)
 		print("")
 		print(p_types)
-		print("-------------")
+		print("-----------")
 		cluster_max = len(poke_types_data[p_types])
 		if cluster_max > 15:
 			cluster_max = 15
@@ -79,7 +79,7 @@ def main():
 	for p_types in pokemon_types:
 		print("")
 		print(p_types)
-		print("-------------")
+		print("-----------")
 
 		for i in range(0, len(set(clusters[p_types]))):
 			print("Cluster " + str(i))
@@ -98,5 +98,3 @@ def main():
 
 main()
 
-# make function that finds best cluster value, refer quiz answers from slide 12
-# loop over each poke type and call the above function, print results in specifc way
