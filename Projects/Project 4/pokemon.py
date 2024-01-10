@@ -6,6 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score 
  
+ 
 
 class SelectColumns( BaseEstimator, TransformerMixin ):
 
